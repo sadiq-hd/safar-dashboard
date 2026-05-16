@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>لوحة تحكم </title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="dashboard">
+    <header class="topbar">
+      <div>
+        <h1>لوحة تحكم</h1>
+        <p>متابعة الحجوزات، الإيرادات، العملاء، والمدفوعات بشكل مباشر</p>
+      </div>
+
+      <div class="top-actions">
+        <button class="tab active" data-tab="overview">نظرة عامة</button>
+        <button class="tab" data-tab="pending">الحجوزات المتوقفة</button>
+        <button class="tab" data-tab="sales">المبيعات</button>
+        <button class="tab" data-tab="reviews">التقييمات</button>
+      </div>
+
+      <div class="date-box">
+        <span id="today"></span>
+        <strong id="clock"></strong>
+      </div>
+    </header>
+
+    <section class="kpi-grid">
+      <button class="kpi" data-tab-jump="sales">
+        <span>إيرادات اليوم</span>
+        <h2 data-target="45230">0</h2>
+        <p class="up">▲ 12% عن أمس</p>
+      </button>
+
+      <button class="kpi" data-tab-jump="overview">
+        <span>إجمالي الحجوزات</span>
+        <h2 data-target="124">0</h2>
+        <p class="up">+18 حجز جديد</p>
+      </button>
+
+      <button class="kpi attention" data-tab-jump="pending">
+        <span>حجوزات متوقفة</span>
+        <h2 data-target="14">0</h2>
+        <p class="warn">تحتاج متابعة</p>
+      </button>
+
+      <button class="kpi">
+        <span>حجوزات ملغية</span>
+        <h2 data-target="8">0</h2>
+        <p class="down">▼ 3 اليوم</p>
+      </button>
+    </section>
+
+    <section class="content">
+      <section class="view active" id="overview">
+        <div class="panel chart-panel">
+          <div class="panel-head">
+            <h3>حركة الحجوزات والإيرادات</h3>
+            <span>آخر 14 يوم</span>
+          </div>
+          <canvas id="trendChart"></canvas>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><h3>حالة الحجوزات</h3></div>
+          <div class="status-list">
+            <div><span><b class="green"></b>مكتملة</span><strong>102</strong></div>
+            <div><span><b class="yellow"></b>متوقفة</span><strong>14</strong></div>
+            <div><span><b class="red"></b>ملغية</span><strong>8</strong></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><h3>أكثر الوجهات طلبًا</h3></div>
+          <div class="bars">
+            <div><span>تركيا</span><b style="width:82%"></b><small>35%</small></div>
+            <div><span>دبي</span><b style="width:64%"></b><small>27%</small></div>
+            <div><span>لندن</span><b style="width:41%"></b><small>18%</small></div>
+            <div><span>المالديف</span><b style="width:30%"></b><small>12%</small></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="pending">
+        <div class="panel wide">
+          <div class="panel-head">
+            <h3>الحجوزات المتوقفة التي تحتاج تواصل</h3>
+            <span>14 حجز</span>
+          </div>
+
+          <div class="booking-list" id="pendingBookings"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><h3>أسباب التوقف</h3></div>
+          <div class="reason-box">
+            <div><strong>6</strong><span>بانتظار الدفع</span></div>
+            <div><strong>4</strong><span>نقص مستندات</span></div>
+            <div><strong>3</strong><span>لم يتم الرد</span></div>
+            <div><strong>1</strong><span>مشكلة تقنية</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="sales">
+        <div class="panel chart-panel">
+          <div class="panel-head">
+            <h3>تحليل المبيعات</h3>
+            <span>ارتفاع / انخفاض الطلب</span>
+          </div>
+          <canvas id="salesChart"></canvas>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><h3>طرق الدفع</h3></div>
+          <div class="payment-grid">
+            <div>تابي <strong>40%</strong></div>
+            <div>تمارا <strong>25%</strong></div>
+            <div>مدى <strong>22%</strong></div>
+            <div>تحويل <strong>13%</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="reviews">
+        <div class="panel wide">
+          <div class="panel-head"><h3>آخر تقييمات العملاء</h3></div>
+          <div class="reviews">
+            <p>★★★★★ <strong>نورة</strong> — الحجز كان سريع وواضح.</p>
+            <p>★★★★☆ <strong>حسين</strong> — الأسعار ممتازة لكن الرد بالواتساب يحتاج يكون أسرع.</p>
+            <p>★★★★★ <strong>فاطمة</strong> — باقة شهر العسل كانت جدًا مرتبة.</p>
+            <p>★★★☆☆ <strong>علي</strong> — احتجت توضيح أكثر بخصوص سياسة الإلغاء.</p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><h3>مؤشر الرضا</h3></div>
+          <div class="score">4.6</div>
+          <p class="muted">متوسط تقييم الوكالة</p>
+        </div>
+      </section>
+    </section>
+
+    <footer class="livebar">
+      <strong>النشاط المباشر:</strong>
+      <span id="activityText">تم استلام دفعة عبر تابي</span>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
