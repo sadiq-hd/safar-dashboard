@@ -3,152 +3,267 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>لوحة تحكم </title>
+  <title>لوحة التحكم</title>
+
   <link rel="stylesheet" href="style.css" />
+
+  <!-- مهم: الرسوم البيانية تعتمد على Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
-  <main class="dashboard">
+  <div class="page">
+
     <header class="topbar">
-      <div>
-        <h1>لوحة تحكم</h1>
-        <p>متابعة الحجوزات، الإيرادات، العملاء، والمدفوعات بشكل مباشر</p>
+      <div class="top-title">
+        <button class="menu-btn" type="button">☰</button>
+        <div>
+          <h1>لوحة التحكم</h1>
+          <p>نظرة عامة مباشرة على الأداء والعمليات</p>
+        </div>
       </div>
 
-      <div class="top-actions">
-        <button class="tab active" data-tab="overview">نظرة عامة</button>
-        <button class="tab" data-tab="pending">الحجوزات المتوقفة</button>
-        <button class="tab" data-tab="sales">المبيعات</button>
-        <button class="tab" data-tab="reviews">التقييمات</button>
-      </div>
-
-      <div class="date-box">
-        <span id="today"></span>
-        <strong id="clock"></strong>
+      <div class="top-filters">
+        <button class="filter" type="button">2025/05/01 - 2025/05/14 <span>📅</span></button>
+        <button class="filter" type="button">كل الفروع <span>⌄</span></button>
+        <button class="filter" type="button">SAR <span>⌄</span></button>
+        <div class="update" id="lastUpdate">آخر تحديث: --</div>
+        <div class="live-dot"><i></i> Live</div>
+        <div class="bell">🔔<b id="notifyCount">5</b></div>
+        <div class="user">
+          <div>
+            <strong>مدير النظام</strong>
+            <span>المدير العام</span>
+          </div>
+          <div class="avatar">م</div>
+        </div>
       </div>
     </header>
 
-    <section class="kpi-grid">
-      <button class="kpi" data-tab-jump="sales">
-        <span>إيرادات اليوم</span>
-        <h2 data-target="45230">0</h2>
-        <p class="up">▲ 12% عن أمس</p>
-      </button>
+    <main class="dashboard">
 
-      <button class="kpi" data-tab-jump="overview">
-        <span>إجمالي الحجوزات</span>
-        <h2 data-target="124">0</h2>
-        <p class="up">+18 حجز جديد</p>
-      </button>
-
-      <button class="kpi attention" data-tab-jump="pending">
-        <span>حجوزات متوقفة</span>
-        <h2 data-target="14">0</h2>
-        <p class="warn">تحتاج متابعة</p>
-      </button>
-
-      <button class="kpi">
-        <span>حجوزات ملغية</span>
-        <h2 data-target="8">0</h2>
-        <p class="down">▼ 3 اليوم</p>
-      </button>
-    </section>
-
-    <section class="content">
-      <section class="view active" id="overview">
-        <div class="panel chart-panel">
-          <div class="panel-head">
-            <h3>حركة الحجوزات والإيرادات</h3>
-            <span>آخر 14 يوم</span>
+      <section class="kpis">
+        <article class="kpi purple">
+          <div class="icon">👥</div>
+          <div>
+            <span>إجمالي العملاء</span>
+            <strong id="customersCount">5,430</strong>
+            <small class="up">↑ +18.6% عن الفترة السابقة</small>
           </div>
-          <canvas id="trendChart"></canvas>
-        </div>
+          <canvas class="spark" data-color="#7c3aed"></canvas>
+        </article>
 
-        <div class="panel">
-          <div class="panel-head"><h3>حالة الحجوزات</h3></div>
-          <div class="status-list">
-            <div><span><b class="green"></b>مكتملة</span><strong>102</strong></div>
-            <div><span><b class="yellow"></b>متوقفة</span><strong>14</strong></div>
-            <div><span><b class="red"></b>ملغية</span><strong>8</strong></div>
+        <article class="kpi green">
+          <div class="icon">🛍️</div>
+          <div>
+            <span>إجمالي الحجوزات</span>
+            <strong id="bookingsCount">1,248</strong>
+            <small class="up">↑ +12.4% عن الفترة السابقة</small>
           </div>
-        </div>
+          <canvas class="spark" data-color="#16c784"></canvas>
+        </article>
 
-        <div class="panel">
-          <div class="panel-head"><h3>أكثر الوجهات طلبًا</h3></div>
-          <div class="bars">
-            <div><span>تركيا</span><b style="width:82%"></b><small>35%</small></div>
-            <div><span>دبي</span><b style="width:64%"></b><small>27%</small></div>
-            <div><span>لندن</span><b style="width:41%"></b><small>18%</small></div>
-            <div><span>المالديف</span><b style="width:30%"></b><small>12%</small></div>
+        <article class="kpi orange">
+          <div class="icon">⏱️</div>
+          <div>
+            <span>حجوزات متوقفة</span>
+            <strong id="pendingCount">14</strong>
+            <small class="down">↓ 3 عن الفترة السابقة</small>
           </div>
-        </div>
+          <canvas class="spark" data-color="#f59e0b"></canvas>
+        </article>
+
+        <article class="kpi red">
+          <div class="icon">✕</div>
+          <div>
+            <span>حجوزات ملغية</span>
+            <strong id="cancelledCount">32</strong>
+            <small class="down">↑ 6 عن الفترة السابقة</small>
+          </div>
+          <canvas class="spark" data-color="#f43f5e"></canvas>
+        </article>
+
+        <article class="kpi blue">
+          <div class="icon">💳</div>
+          <div>
+            <span>إجمالي الإيرادات</span>
+            <strong id="revenueCount">1,026,540</strong>
+            <small class="up">↑ +15.7% عن الفترة السابقة</small>
+          </div>
+          <canvas class="spark" data-color="#2563eb"></canvas>
+        </article>
       </section>
 
-      <section class="view" id="pending">
-        <div class="panel wide">
-          <div class="panel-head">
-            <h3>الحجوزات المتوقفة التي تحتاج تواصل</h3>
-            <span>14 حجز</span>
+      <section class="grid">
+
+        <article class="card main-chart-card">
+          <div class="card-head">
+            <h2>تطور الحجوزات والإيرادات</h2>
+            <button type="button">Live آخر 14 يوم</button>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="mainChart"></canvas>
+          </div>
+        </article>
+
+        <article class="card status-card">
+          <div class="card-head">
+            <h2>حالة الحجوزات</h2>
+            <button type="button">•••</button>
           </div>
 
-          <div class="booking-list" id="pendingBookings"></div>
-        </div>
+          <div class="status-content">
+            <div class="donut-wrap">
+              <canvas id="statusChart"></canvas>
+              <div class="donut-center">
+                <strong id="statusTotal">1,176</strong>
+                <span>إجمالي</span>
+              </div>
+            </div>
 
-        <div class="panel">
-          <div class="panel-head"><h3>أسباب التوقف</h3></div>
-          <div class="reason-box">
-            <div><strong>6</strong><span>بانتظار الدفع</span></div>
-            <div><strong>4</strong><span>نقص مستندات</span></div>
-            <div><strong>3</strong><span>لم يتم الرد</span></div>
-            <div><strong>1</strong><span>مشكلة تقنية</span></div>
+            <ul class="legend">
+              <li><i class="green-dot"></i>مكتملة <b id="completedLabel">1,102 (93.6%)</b></li>
+              <li><i class="orange-dot"></i>متوقفة <b id="pendingLabel">14 (1.2%)</b></li>
+              <li><i class="red-dot"></i>ملغية <b id="cancelledLabel">32 (2.7%)</b></li>
+              <li><i class="blue-dot"></i>جديدة <b id="newLabel">28 (2.4%)</b></li>
+            </ul>
           </div>
-        </div>
+        </article>
+
+        <aside class="side">
+
+          <article class="card mini destinations-card">
+            <h2>أكثر الوجهات طلبًا</h2>
+            <div class="bars">
+              <div><span>تركيا</span><b><i style="width:35%"></i></b><em>35%</em></div>
+              <div><span>دبي</span><b><i style="width:27%"></i></b><em>27%</em></div>
+              <div><span>لندن</span><b><i style="width:18%"></i></b><em>18%</em></div>
+              <div><span>المالديف</span><b><i style="width:12%"></i></b><em>12%</em></div>
+              <div><span>القاهرة</span><b><i style="width:8%"></i></b><em>8%</em></div>
+            </div>
+          </article>
+
+          <article class="card mini payment-card">
+            <h2>طرق الدفع</h2>
+
+            <div class="pay-box">
+              <div class="pay-chart-wrap">
+                <canvas id="payChart"></canvas>
+              </div>
+
+              <ul class="pay-legend">
+                <li><i class="teal-dot"></i><span>تابي</span><b id="pay1">40%</b></li>
+                <li><i class="purple-dot"></i><span>تمارا</span><b id="pay2">25%</b></li>
+                <li><i class="green-dot"></i><span>مدى</span><b id="pay3">22%</b></li>
+                <li><i class="yellow-dot"></i><span>تحويل بنكي</span><b id="pay4">13%</b></li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="card activity">
+            <h2>النشاط المباشر</h2>
+            <ul id="activityList">
+              <li><i class="green-bg">✓</i><span>تم استلام دفعة عبر تابي</span><em>منذ 2 دقيقة</em></li>
+              <li><i class="blue-bg">✈</i><span>حجز جديد لرحلة دبي</span><em>منذ 5 دقائق</em></li>
+              <li><i class="orange-bg">!</i><span>عميل يحتاج تواصل لاستكمال الدفع</span><em>منذ 12 دقيقة</em></li>
+              <li><i class="green-bg">✓</i><span>تمت الموافقة على مستندات</span><em>منذ 18 دقيقة</em></li>
+              <li><i class="purple-bg">★</i><span>تقييم جديد 5 نجوم</span><em>منذ 25 دقيقة</em></li>
+            </ul>
+            <a class="show-all">عرض كل النشاط ←</a>
+          </article>
+
+        </aside>
+
+        <article class="card branch-card">
+          <div class="card-head">
+            <h2>أداء الفروع</h2>
+            <button type="button">شهري</button>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="branchChart"></canvas>
+          </div>
+        </article>
+
+        <article class="card table-card">
+          <div class="card-head">
+            <h2>آخر الحجوزات المتوقفة</h2>
+            <span class="alert">!</span>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>رقم الحجز</th>
+                <th>العميل</th>
+                <th>الوجهة</th>
+                <th>تاريخ الحجز</th>
+                <th>المبلغ</th>
+                <th>سبب التوقف</th>
+                <th>آخر تواصل</th>
+                <th>الإجراء</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="link">BK-1054</td>
+                <td>أحمد علي</td>
+                <td>دبي - 4 ليالي</td>
+                <td>2025/05/14</td>
+                <td>5,250 ريال</td>
+                <td><span class="tag orange-tag">بانتظار الدفع</span></td>
+                <td>منذ 1 ساعة</td>
+                <td class="actions"><button>واتساب</button><button>اتصال</button></td>
+              </tr>
+              <tr>
+                <td class="link">BK-1051</td>
+                <td>نورة حسن</td>
+                <td>تركيا - 7 أيام</td>
+                <td>2025/05/14</td>
+                <td>8,750 ريال</td>
+                <td><span class="tag yellow-tag">نقص مستندات</span></td>
+                <td>منذ 3 ساعات</td>
+                <td class="actions"><button>واتساب</button><button>اتصال</button></td>
+              </tr>
+              <tr>
+                <td class="link">BK-1049</td>
+                <td>فاطمة عبدالله</td>
+                <td>المالديف - شهر عسل</td>
+                <td>2025/05/13</td>
+                <td>12,400 ريال</td>
+                <td><span class="tag red-tag">لم يتم الرد</span></td>
+                <td>منذ 5 ساعات</td>
+                <td class="actions"><button>واتساب</button><button>اتصال</button></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <a class="show-all">عرض جميع الحجوزات المتوقفة ←</a>
+        </article>
+
       </section>
 
-      <section class="view" id="sales">
-        <div class="panel chart-panel">
-          <div class="panel-head">
-            <h3>تحليل المبيعات</h3>
-            <span>ارتفاع / انخفاض الطلب</span>
-          </div>
-          <canvas id="salesChart"></canvas>
-        </div>
-
-        <div class="panel">
-          <div class="panel-head"><h3>طرق الدفع</h3></div>
-          <div class="payment-grid">
-            <div>تابي <strong>40%</strong></div>
-            <div>تمارا <strong>25%</strong></div>
-            <div>مدى <strong>22%</strong></div>
-            <div>تحويل <strong>13%</strong></div>
-          </div>
-        </div>
+      <section class="bottom-kpis">
+        <article>
+          <i>🔥</i>
+          <div><span>متوسط قيمة الحجز</span><strong id="avgBooking">2,850 ريال</strong><small class="up">↑ +9.4%</small></div>
+        </article>
+        <article>
+          <i>✅</i>
+          <div><span>نسبة إتمام الحجوزات</span><strong id="completeRate">76.8%</strong><small class="up">↑ +5.2%</small></div>
+        </article>
+        <article>
+          <i>⏱️</i>
+          <div><span>متوسط وقت الاستجابة</span><strong id="responseTime">18 دقيقة</strong><small class="up">↓ 4 دقائق</small></div>
+        </article>
+        <article>
+          <i>👥</i>
+          <div><span>العملاء الجدد</span><strong id="newCustomers">236</strong><small class="up">↑ +14.6%</small></div>
+        </article>
       </section>
 
-      <section class="view" id="reviews">
-        <div class="panel wide">
-          <div class="panel-head"><h3>آخر تقييمات العملاء</h3></div>
-          <div class="reviews">
-            <p>★★★★★ <strong>نورة</strong> — الحجز كان سريع وواضح.</p>
-            <p>★★★★☆ <strong>حسين</strong> — الأسعار ممتازة لكن الرد بالواتساب يحتاج يكون أسرع.</p>
-            <p>★★★★★ <strong>فاطمة</strong> — باقة شهر العسل كانت جدًا مرتبة.</p>
-            <p>★★★☆☆ <strong>علي</strong> — احتجت توضيح أكثر بخصوص سياسة الإلغاء.</p>
-          </div>
-        </div>
+    </main>
+  </div>
 
-        <div class="panel">
-          <div class="panel-head"><h3>مؤشر الرضا</h3></div>
-          <div class="score">4.6</div>
-          <p class="muted">متوسط تقييم الوكالة</p>
-        </div>
-      </section>
-    </section>
-
-    <footer class="livebar">
-      <strong>النشاط المباشر:</strong>
-      <span id="activityText">تم استلام دفعة عبر تابي</span>
-    </footer>
-  </main>
-
-  <script src="app.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
